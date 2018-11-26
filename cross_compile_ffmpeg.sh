@@ -1850,20 +1850,21 @@ build_ffmpeg() {
       init_options+=" --disable-schannel"
       # Fix WinXP incompatibility by disabling Microsoft's Secure Channel, because Windows XP doesn't support TLS 1.1 and 1.2, but with GnuTLS or OpenSSL it does.  XP compat!
     fi
-    config_options="$init_options --enable-libcaca --enable-gray --enable-libtesseract --enable-fontconfig --enable-gmp --enable-gnutls --enable-libass --enable-libbluray --enable-libbs2b --enable-libflite --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libilbc --enable-libmodplug --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopus --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libtwolame --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libzimg --enable-libzvbi --enable-libmysofa --enable-libaom --enable-libopenjpeg  --enable-libopenh264 --enable-liblensfun"
-    if [[ $compiler_flavors != "native" ]]; then
-      config_options+=" --enable-nvenc --enable-nvdec" # don't work OS X 
-    fi
+    #config_options="$init_options --enable-libcaca --enable-gray --enable-libtesseract --enable-fontconfig --enable-gmp --enable-gnutls --enable-libass --enable-libbluray --enable-libbs2b --enable-libflite --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libilbc --enable-libmodplug --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopus --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libtwolame --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libzimg --enable-libzvbi --enable-libmysofa --enable-libaom --enable-libopenjpeg  --enable-libopenh264 --enable-liblensfun"
+    config_options="$init_options --enable-libmp3lame"
+    #if [[ $compiler_flavors != "native" ]]; then
+      #config_options+=" --enable-nvenc --enable-nvdec" # don't work OS X 
+    #fi
 
     config_options+=" --extra-libs=-lm" # libflite seemed to need this linux native...and have no .pc file huh?
     config_options+=" --extra-libs=-lpthread" # for some reason various and sundry needed this linux native
 
     config_options+=" --extra-cflags=-DLIBTWOLAME_STATIC --extra-cflags=-DMODPLUG_STATIC --extra-cflags=-DCACA_STATIC" # if we ever do a git pull then it nukes changes, which overrides manual changes to configure, so just use these for now :|
-    if [[ $build_amd_amf = n ]]; then
+    #if [[ $build_amd_amf = n ]]; then
       config_options+=" --disable-amf" # Since its autodetected we have to disable it if we do not want it. #unless we define no autodetection but.. we don't.
-    else
-      config_options+=" --enable-amf" # This is actually autodetected but for consistency.. we might as well set it.
-    fi
+    #else
+      #config_options+=" --enable-amf" # This is actually autodetected but for consistency.. we might as well set it.
+    #fi
 
     if [[ $build_intel_qsv = y ]]; then
       config_options+=" --enable-libmfx"
@@ -1883,7 +1884,7 @@ build_ffmpeg() {
     fi 
     # other possibilities:
     #   --enable-w32threads # [worse UDP than pthreads, so not using that]
-    config_options+=" --enable-avresample" # guess this is some kind of libav specific thing (the FFmpeg fork) but L-Smash needs it so why not always build it :)
+    #config_options+=" --enable-avresample" # guess this is some kind of libav specific thing (the FFmpeg fork) but L-Smash needs it so why not always build it :)
 
     for i in $CFLAGS; do
       config_options+=" --extra-cflags=$i" # --extra-cflags may not be needed here, but adds it to the final console output which I like for debugging purposes
